@@ -27,4 +27,18 @@ public class MiscMethods{
         }
         return result;
     }
+
+    // select k element from a list based on the probability
+    public static List<QuestionCard> SelectCardByWeight(List<QuestionCard> cards, int k = 10){
+        List<QuestionCard> selectedCards = new List<QuestionCard>();
+        cards.Sort((c1, c2)=> c2.GetQuestionCardWeight().CompareTo(c1.GetQuestionCardWeight()));
+
+        while (selectedCards.Count < k && selectedCards.Count < cards.Count) {
+            QuestionCard card = cards[selectedCards.Count];
+            if (!selectedCards.Contains(card)) {
+                selectedCards.Add(card);
+            }
+        }
+        return selectedCards;
+    }
 }

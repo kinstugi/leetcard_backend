@@ -34,7 +34,9 @@ public class UserRepository{
         var mycards = await Task.Run(()=> _dbConext.QuestionCards
             .Where( u => u.User.UserId == userId)
             .Include(qCard => qCard.Question)
-            .ThenInclude(card => card.Options).ToList());
+            .ThenInclude(card => card.Options)
+            .Include(card => card.Question.Solution)
+            .ToList());
         return mycards;
     }
 }

@@ -2,3 +2,4 @@ bin/
 db.sqlite3
 obj/
 .vscode/
+Migrations/
