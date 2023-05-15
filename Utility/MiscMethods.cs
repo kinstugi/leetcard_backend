@@ -4,6 +4,8 @@ namespace SharpCardAPI.Utility;
 
 public class MiscMethods{
     // this function will shuffle an array
+    public static string[] Packs = {"Coding Interviews", "Algorithms Pack"};
+
     public static void Shuffle(ref List<object> array){
         Random random = new Random();
         for(int i = 0; i < array.Count; i++){
@@ -28,17 +30,15 @@ public class MiscMethods{
         return result;
     }
 
-    // select k element from a list based on the probability
-    public static List<QuestionCard> SelectCardByWeight(List<QuestionCard> cards, int k = 10){
-        List<QuestionCard> selectedCards = new List<QuestionCard>();
-        cards.Sort((c1, c2)=> c2.GetQuestionCardWeight().CompareTo(c1.GetQuestionCardWeight()));
-
-        while (selectedCards.Count < k && selectedCards.Count < cards.Count) {
-            QuestionCard card = cards[selectedCards.Count];
-            if (!selectedCards.Contains(card)) {
-                selectedCards.Add(card);
-            }
-        }
-        return selectedCards;
+    public static int StringToInt(string numStr, int min, int max){
+        int num;
+        bool res =  int.TryParse(numStr, out num);
+        if (!res)
+            num = min;
+        if (num < min)
+            num = min;
+        else if (num > max)
+            num = max;
+        return num;
     }
 }

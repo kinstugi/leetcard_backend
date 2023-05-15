@@ -22,25 +22,35 @@ builder.Services.AddDbContext<AppDbContext>(); // adding db context
 
 builder.Services.AddTransient<AuthRepository>();
 builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<QuestionRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => {
+    builder.WithOrigins("http://localhost:57426")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials();
+}));
+
 // this command will populate the database with the tsv file
-var myCustomCLI = new CommandLineApplication();
-myCustomCLI.Command("loaddata", command=> {
-    command.Description = "to load data from tsv to database";
-    command.OnExecute(() => {
-        var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionBuilder.UseSqlite("Data Source=db.sqlite3");
-        var dbContext = new AppDbContext(optionBuilder.Options);
-        IOMethods.ReadQuestionCSV(dbContext).Wait();
-        return 0;
-    });
-});
-myCustomCLI.Execute(args);
+// var myCustomCLI = new CommandLineApplication();
+// myCustomCLI.Command("loaddata", command=> {
+//     command.Description = "to load data from tsv to database";
+//     command.OnExecute(() => {
+//         var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+//         optionBuilder.UseSqlite("Data Source=db.sqlite3");
+//         var dbContext = new AppDbContext(optionBuilder.Options);
+//         string[] files = Directory.GetFiles("./packs");
+//         foreach(string filePath in files)
+//             IOMethods.ReadQuestionCSV(dbContext, filePath).Wait();
+//         return 0;
+//     });
+// });
+// myCustomCLI.Execute(args);
 // <<<<<<<< ------ >>>>>>>>>>
 
 var app = builder.Build();
@@ -57,5 +67,5 @@ app.UseAuthentication(); //adding auth middleware
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors("CorsPolicy"); // remove this
 app.Run();
