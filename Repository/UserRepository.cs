@@ -30,9 +30,10 @@ public class UserRepository{
         }
     }
 
-    public async Task<List<QuestionCard>> GetUserQuestionCards(int userId){
+    public async Task<List<QuestionCard>> GetUserQuestionCards(int userId, string pack){
         var mycards = await Task.Run(()=> _dbContext.QuestionCards
             .Where( u => u.User.UserId == userId)
+            .Where(q => q.Question.Pack == pack)
             .Include(qCard => qCard.Question)
             .ThenInclude(card => card.Options)
             .Include(card => card.Question.Solution)
@@ -43,7 +44,7 @@ public class UserRepository{
        public async Task<double> GetUserStats(int userId){
         var totalAttempts = await Task.Run(()=> _dbContext.QuestionCards.Where(card => card.User.UserId == userId).Sum(card => card.NumberOfAttempts));
         var totalSuccess = await Task.Run(() => _dbContext.QuestionCards.Where(card => card.User.UserId == userId).Sum(card=>card.CorrectAttempts));
-        if (totalAttempts == 0) throw new Exception("No questions have been attempted in Interview Mode yet");
+        if (totalAttempts == 0) return -1;
         var res =  (double)totalSuccess / totalAttempts;
         return Math.Round(res, 2);
     }
@@ -53,7 +54,7 @@ public class UserRepository{
         var totalAttempts = await Task.Run(() => _dbContext.QuestionCards.Count(card => card.User.UserId == userId));
         if (totalAttempts == 0)
         {
-            throw new Exception("No questions attempted in Interview Mode yet.  All are at 0%");
+            return new List<Question>();
         }
 
         var topQuestions = await _dbContext.QuestionCards
@@ -78,7 +79,7 @@ public class UserRepository{
         var totalAttempts = await Task.Run(() => _dbContext.QuestionCards.Count(card => card.User.UserId == userId));
         if (totalAttempts == 0)
         {
-            throw new Exception("No questions attempted in Interview Mode.  Every question sits at 0% success.");
+            return new List<Question>();
         }
 
         var bottomQuestions = await _dbContext.QuestionCards
