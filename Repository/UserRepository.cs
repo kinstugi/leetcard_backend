@@ -131,4 +131,25 @@ public class UserRepository{
             .GetRange(0, count)
         );
     }
+
+    public async Task<bool> UpdateQuestionCardStat(int userId, int cardId, bool answer){
+        var card = await _dbContext.QuestionCards
+        .Where(q => q.User.UserId == userId && q.QuestionCardId == cardId)
+        .FirstAsync();
+        if (card == null) return false;
+        card.UpdateStatistics(answer);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UpdateNextReviewDate(int userId, int cardId, int quality){
+        var card = await _dbContext.QuestionCards
+        .Where(q => q.User.UserId == userId && q.QuestionCardId == cardId)
+        .FirstAsync();
+        
+        if (card == null) return false;
+        card.UpdateQuestionCard(quality);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
 }

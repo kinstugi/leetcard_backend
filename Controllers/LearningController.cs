@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharpCardAPI.Repository;
 using SharpCardAPI.Utility;
+using SharpCardAPI.Models;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -34,8 +35,9 @@ public class LearningController: ControllerBase{
     }
 
     [HttpPost("{questionId}/solve")]
-    public async Task<IActionResult> SolveQuestion(){
-        await Task.Delay(1);
-        return Ok();
+    public async Task<IActionResult> SolveQuestion(int questionId, QuestionResponseDTO responseDTO){
+        var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
+        var res = await _userRepository.UpdateNextReviewDate(int.Parse(userIdStr), questionId, responseDTO.AnswerQuality);
+        return Ok(res);
     }
 }

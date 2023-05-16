@@ -18,13 +18,7 @@ public class QuestionCard{
     public Question Question { get; set; } = null!;
     public User User { get; set; } = null!;
 
-    public void UpdateQuestionCard(bool answeredCorrectly, bool didUsedHint = false){
-        int quality = 5;
-        if (!answeredCorrectly)
-            quality = 0;
-        if (answeredCorrectly && didUsedHint)
-            quality = 4;
-        
+    public void UpdateQuestionCard(int quality){
         SM2Algorithm.CalculateNewInterval(Repititions, NextScheduledReview, EaseFactor, quality, out DateTime nextScheduledReview, out double newEaseFactor, out int newRep);
         Repititions = newRep;
         EaseFactor = newEaseFactor;
@@ -37,4 +31,11 @@ public class QuestionCard{
         }
         NumberOfAttempts++;
     }
+}
+
+
+
+public class QuestionResponseDTO{
+    public int AnswerQuality { get; set; }
+    public bool DidAnswerCorrectly { get; set; }
 }
