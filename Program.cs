@@ -30,7 +30,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => {
-    builder.WithOrigins("http://localhost:57426")
+    builder.WithOrigins("https://localhost:7129")
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowCredentials();
