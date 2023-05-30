@@ -40,7 +40,7 @@ public class IOMethods{
         }
     }
 
-    private static int GetCorrectIndex(string ch, int offset = 6){
+    private static int GetCorrectIndex(string ch, int offset = 8){
         return ch[0]-'A' + offset;
     }
 

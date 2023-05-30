@@ -30,10 +30,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => {
-    builder.WithOrigins("https://localhost:7129")
+    builder
+    .AllowAnyOrigin()
     .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials();
+    .AllowAnyHeader();
 }));
 
 // this command will populate the database with the tsv file

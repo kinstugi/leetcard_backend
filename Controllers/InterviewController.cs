@@ -29,7 +29,7 @@ public class InterviewController: ControllerBase{
     [HttpPost("{questionId}/solve")]
     public async Task<IActionResult> UpdateStat(int questionId, QuestionResponseDTO responseDTO){
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
-        await _userRepository.UpdateQuestionCardStat(int.Parse(userIdStr), questionId, responseDTO.DidAnswerCorrectly);
-        return Ok();
+        var res = await _userRepository.UpdateQuestionCardStat(int.Parse(userIdStr), questionId, responseDTO.DidAnswerCorrectly);
+        return Ok(res);
     }
 }
