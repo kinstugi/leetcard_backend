@@ -16,7 +16,7 @@ public class IOMethods{
                 string line = parser.ReadLine()!;
                 if (i == 1) continue;
                 string[] cols = line.Split('\t');
-                var solution = new ProblemSolution { TimeComplexity = cols[5], SpaceComplexity = cols[6], SolutionUrl = cols[18] };
+                var solution = new ProblemSolution { TimeComplexity = cols[5], SpaceComplexity = cols[6], VideoSolutionUrl = cols[21], CppCodeUrl = cols[18], PythonCodeUrl = cols[19], JavaCodeurl = cols[20] };
                 var question = new Question { Pack = cols[0], ProblemTitle = cols[2], ProblemStatement = cols[4], Problem = cols[7], ProblemUrl = cols[3], Hint = cols[17], Topic = cols[1] };
                 question.Solution = solution;
                 question.Options.Add(new Option { Text = cols[8], Message = cols[13], IsCorrect = 8 == GetCorrectIndex(cols[12]) });
