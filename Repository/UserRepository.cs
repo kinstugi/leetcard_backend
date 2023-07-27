@@ -127,6 +127,7 @@ public class UserRepository{
             .Where(q => q.Question.Pack == pack)
             .Include(q => q.Question)
             .ThenInclude(q => q.Options)
+            .Include(q => q.Question.Solution)
             .ToList()
             .GetRange(0, count)
         );
