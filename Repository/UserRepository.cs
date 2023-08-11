@@ -99,6 +99,54 @@ public class UserRepository{
         return bottomQuestions;
     }
 
+    public async Task<IEnumerable<TopicSuccessRate>> GetTopTopics(int userId, int count)
+    {
+        var totalAttempts = await Task.Run(() => _dbContext.QuestionCards.Count(card => card.User.UserId == userId));
+        if (totalAttempts == 0)
+        {
+            return new List<TopicSuccessRate>();
+        }
+
+        var topTopics = await _dbContext.QuestionCards
+            .Include(card => card.Question)
+            .Where(card => card.NumberOfAttempts > 0)
+            .GroupBy(card => card.Question.Topic)
+            .Select(group => new TopicSuccessRate
+            {
+                Topic = group.Key,
+                SuccessRate = (double)group.Sum(card => card.CorrectAttempts) / group.Sum(card => card.NumberOfAttempts)
+            })
+            .OrderByDescending(q => q.SuccessRate)
+            .Take(count)
+            .ToListAsync();
+
+        return topTopics;
+    }
+
+    public async Task<IEnumerable<TopicSuccessRate>> GetBottomTopics(int userId, int count)
+    {
+        var totalAttempts = await Task.Run(() => _dbContext.QuestionCards.Count(card => card.User.UserId == userId));
+        if (totalAttempts == 0)
+        {
+            return new List<TopicSuccessRate>();
+        }
+
+        var bottomTopics = await _dbContext.QuestionCards
+            .Include(card => card.Question)
+            .Where(card => card.NumberOfAttempts > 0)
+            .GroupBy(card => card.Question.Topic)
+            .Select(group => new TopicSuccessRate
+            {
+                Topic = group.Key,
+                SuccessRate = (double)group.Sum(card => card.CorrectAttempts) / group.Sum(card => card.NumberOfAttempts)
+            })
+            .OrderBy(q => q.SuccessRate)
+            .Take(count)
+            .ToListAsync();
+
+        return bottomTopics;
+    }
+
 
     public async Task ResetData(int userId){
         var userCards = _dbContext.QuestionCards.Where(q => q.User.UserId == userId);

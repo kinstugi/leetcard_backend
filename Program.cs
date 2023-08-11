@@ -36,23 +36,22 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => {
     .AllowAnyHeader();
 }));
 
-// this command will populate the database with the tsv file
-// var myCustomCLI = new CommandLineApplication();
-// myCustomCLI.Command("loaddata", command=> {
-//     command.Description = "to load data from tsv to database";
-//     command.OnExecute(() => {
-//         var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
-//         optionBuilder.UseSqlite("Data Source=db.sqlite3");
-//         var dbContext = new AppDbContext(optionBuilder.Options);
-//         string[] files = Directory.GetFiles("./packs");
-//         foreach(string filePath in files)
-//             IOMethods.ReadQuestionCSV(dbContext, filePath).Wait();
-//         return 0;
-//     });
-// });
-// myCustomCLI.Execute(args);
-// <<<<<<<< ------ >>>>>>>>>>
-
+/*
+ var myCustomCLI = new CommandLineApplication();
+ myCustomCLI.Command("loaddata", command=> {
+     command.Description = "to load data from tsv to database";
+     command.OnExecute(() => {
+         var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+         optionBuilder.UseSqlite("Data Source=db.sqlite3");
+         var dbContext = new AppDbContext(optionBuilder.Options);
+         string[] files = Directory.GetFiles("./packs");
+         foreach(string filePath in files)
+             IOMethods.ReadQuestionCSV(dbContext, filePath).Wait();
+         return 0;
+     });
+ });
+ myCustomCLI.Execute(args);
+*/
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

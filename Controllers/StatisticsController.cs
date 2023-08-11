@@ -23,6 +23,9 @@ public class StatisticsController: ControllerBase{
         res["overall"] = await _userRepo.GetUserStats(userId);
         res["topQuestions"] = await _userRepo.GetTopQuestions(userId, count);
         res["bottomQuestions"] = await _userRepo.GetBottomQuestions(userId, count);
+        res["topTopics"] = await _userRepo.GetTopTopics(userId, count);
+        res["bottomTopics"] = await _userRepo.GetBottomTopics(userId, count);
+
         return Ok(res);
     }
 
