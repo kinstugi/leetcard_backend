@@ -4,6 +4,7 @@ namespace SharpCardAPI.Models;
 public class Question{
     public string Topic { get; set; } = String.Empty;
     public string Pack { get; set; } = string.Empty;
+    public string VideoSolutionUrl { get; set; } = string.Empty;
     public int QuestionId { get; set; }
     public ProblemSolution Solution { get; set; } = null!;
     public string ProblemStatement { get; set; } = string.Empty;
