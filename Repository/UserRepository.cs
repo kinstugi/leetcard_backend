@@ -51,52 +51,24 @@ public class UserRepository{
 
     public async Task<IEnumerable<Question>> GetTopQuestions(int userId, int count)
     {
-        var totalAttempts = await Task.Run(() => _dbContext.QuestionCards.Count(card => card.User.UserId == userId));
-        if (totalAttempts == 0)
-        {
-            return new List<Question>();
-        }
-
-        var topQuestions = await _dbContext.QuestionCards
-            .Include(card => card.Question)
-            .Where(card => card.NumberOfAttempts > 0)
-            .GroupBy(card => card.Question)
-            .Select(group => new
-            {
-                Question = group.Key,
-                SuccessRate = (double)group.Sum(card => card.CorrectAttempts) / group.Sum(card => card.NumberOfAttempts)
-            })
-            .OrderByDescending(q => q.SuccessRate)
+        return _dbContext.QuestionCards
+            .Where(card => card.User.UserId == userId && card.NumberOfAttempts > 0)
+            .Include(card => card.Question.Solution)
+            .OrderByDescending(card => (double)card.CorrectAttempts / card.NumberOfAttempts)
             .Take(count)
-            .Select(q => q.Question)
-            .ToListAsync();
-
-        return topQuestions;
+            .Select(card => card.Question)
+            .ToList();
     }
 
     public async Task<IEnumerable<Question>> GetBottomQuestions(int userId, int count)
     {
-        var totalAttempts = await Task.Run(() => _dbContext.QuestionCards.Count(card => card.User.UserId == userId));
-        if (totalAttempts == 0)
-        {
-            return new List<Question>();
-        }
-
-        var bottomQuestions = await _dbContext.QuestionCards
-            .Include(card => card.Question)
-            .Where(card => card.NumberOfAttempts > 0)
-            .GroupBy(card => card.Question)
-            .Select(group => new
-            {
-                Question = group.Key,
-                SuccessRate = (double)group.Sum(card => card.CorrectAttempts) / group.Sum(card => card.NumberOfAttempts)
-            })
-            .OrderBy(q => q.SuccessRate)
+        return _dbContext.QuestionCards
+            .Where(card => card.User.UserId == userId && card.NumberOfAttempts > 0)
+            .Include(card => card.Question.Solution)
+            .OrderBy(card => (double) card.CorrectAttempts / card.NumberOfAttempts)
             .Take(count)
-            .Select(q => q.Question)
-            .ToListAsync();
-
-        return bottomQuestions;
+            .Select(card => card.Question)
+            .ToList();
     }
 
 
