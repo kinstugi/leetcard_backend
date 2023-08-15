@@ -73,7 +73,7 @@ public class UserRepository{
 
 
     public async Task ResetData(int userId){
-        var userCards = _dbContext.QuestionCards.Where(q => q.User.UserId == userId);
+        var userCards = _dbContext.QuestionCards.Where(q => q.User.UserId == userId && q.NumberOfAttempts > 0);
         foreach (var card in userCards)
         {
             card.NumberOfAttempts = 0;
