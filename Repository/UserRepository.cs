@@ -51,6 +51,7 @@ public class UserRepository{
 
     public async Task<IEnumerable<Question>> GetTopQuestions(int userId, int count)
     {
+        await Task.Delay(1);
         return _dbContext.QuestionCards
             .Where(card => card.User.UserId == userId && card.NumberOfAttempts > 0)
             .Include(card => card.Question.Solution)
@@ -62,6 +63,7 @@ public class UserRepository{
 
     public async Task<IEnumerable<Question>> GetBottomQuestions(int userId, int count)
     {
+        await Task.Delay(1);
         return _dbContext.QuestionCards
             .Where(card => card.User.UserId == userId && card.NumberOfAttempts > 0)
             .Include(card => card.Question.Solution)
