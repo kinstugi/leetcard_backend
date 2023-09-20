@@ -21,7 +21,7 @@ public class LearningController: ControllerBase{
         string numStr = HttpContext.Request.Query["number"].ToString();
         string pack = HttpContext.Request.Query["pack"].ToString();
         int pId = MiscMethods.StringToInt(pack, 1, 2);
-        int numberOfQuestions = MiscMethods.StringToInt(numStr, 5, 20);
+        int numberOfQuestions = MiscMethods.StringToInt(numStr, 1, 50);
         var cards = await _userRepository.GetLearningCards(int.Parse(userIdStr), numberOfQuestions, MiscMethods.Packs[pId-1]);
         return Ok(cards);
     }
