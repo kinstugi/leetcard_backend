@@ -15,7 +15,7 @@ public class QuizController: ControllerBase{
     public async Task<IActionResult> GetRandomCards(){
         string numStr = HttpContext.Request.Query["number"].ToString();
         string pack = HttpContext.Request.Query["pack"].ToString();
-        int numberOfQuestions = MiscMethods.StringToInt(numStr, 5, 20);
+        int numberOfQuestions = MiscMethods.StringToInt(numStr, 1, 50);
         int pId = MiscMethods.StringToInt(pack, 1, 2);
         var cards = await _qRepo.GetRandomQuestion(MiscMethods.Packs[pId-1] ,numberOfQuestions);
         return Ok(cards);
