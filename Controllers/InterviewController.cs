@@ -19,7 +19,7 @@ public class InterviewController: ControllerBase{
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
         string numStr = HttpContext.Request.Query["number"].ToString();
         string pack = HttpContext.Request.Query["pack"].ToString();
-        int numberOfQuestions = MiscMethods.StringToInt(numStr, 5, 20);
+        int numberOfQuestions = MiscMethods.StringToInt(numStr, 1, 50);
         int pId = MiscMethods.StringToInt(pack, 1, 2);
         var cards = await _userRepository.GetUserQuestionCards(int.Parse(userIdStr), MiscMethods.Packs[pId-1]);
         var questionSet = MiscMethods.SelectRandomDistinct<QuestionCard>(cards, numberOfQuestions);
