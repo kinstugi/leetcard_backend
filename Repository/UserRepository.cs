@@ -4,7 +4,20 @@ using SharpCardAPI.Models;
 
 namespace SharpCardAPI.Repository;
 
-public class UserRepository{
+public interface IUserRepository{
+    public Task CreateUserQuestionCards(User user);
+    public Task<List<QuestionCard>> GetUserQuestionCards(int userId, string pack);
+    public Task<double> GetUserStats(int userId);
+    public Task<IEnumerable<Question>> GetTopQuestions(int userId, int count);
+    public Task<IEnumerable<Question>> GetBottomQuestions(int userId, int count);
+    public Task ResetData(int userId);
+    public Task<List<QuestionCard>> GetCardsToReview(int userId);
+    public Task<List<QuestionCard>> GetLearningCards(int userId, int count, string pack);
+    public Task<bool> UpdateQuestionCardStat(int userId, int cardId, bool answer);
+    public Task<bool> UpdateNextReviewDate(int userId, int cardId, int quality);
+}
+
+public class UserRepository: IUserRepository{
     private readonly AppDbContext _dbContext;
 
     public UserRepository(AppDbContext dbContext){
@@ -41,7 +54,7 @@ public class UserRepository{
         return mycards;
     }
 
-       public async Task<double> GetUserStats(int userId){
+    public async Task<double> GetUserStats(int userId){
         var totalAttempts = await Task.Run(()=> _dbContext.QuestionCards.Where(card => card.User.UserId == userId).Sum(card => card.NumberOfAttempts));
         var totalSuccess = await Task.Run(() => _dbContext.QuestionCards.Where(card => card.User.UserId == userId).Sum(card=>card.CorrectAttempts));
         if (totalAttempts == 0) return -1;

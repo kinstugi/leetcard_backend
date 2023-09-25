@@ -9,20 +9,18 @@ using SharpCardAPI.Utility;
 [Route("api/[controller]")]
 [Authorize]
 public class InterviewController: ControllerBase{
-    private readonly UserRepository _userRepository;
-    public InterviewController(UserRepository userRepository){
+    private readonly IUserRepository _userRepository;
+    public InterviewController(IUserRepository userRepository){
         _userRepository = userRepository;
     }
 
     [HttpGet("cards")]
-    public async Task<IActionResult> GetRandomCards(){
+    public async Task<IActionResult> GetRandomCards([FromQuery]int pack=1, [FromQuery]int number=1){
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
-        string numStr = HttpContext.Request.Query["number"].ToString();
-        string pack = HttpContext.Request.Query["pack"].ToString();
-        int numberOfQuestions = MiscMethods.StringToInt(numStr, 1, 50);
-        int pId = MiscMethods.StringToInt(pack, 1, 2);
-        var cards = await _userRepository.GetUserQuestionCards(int.Parse(userIdStr), MiscMethods.Packs[pId-1]);
-        var questionSet = MiscMethods.SelectRandomDistinct<QuestionCard>(cards, numberOfQuestions);
+        if (pack != 1 && pack != 2) pack = 1;
+        if (!(0 <= number && number <= 50)) number = 1;
+        var cards = await _userRepository.GetUserQuestionCards(int.Parse(userIdStr), MiscMethods.Packs[pack-1]);
+        var questionSet = MiscMethods.SelectRandomDistinct<QuestionCard>(cards, number);
         return Ok(questionSet);
     }
 

@@ -5,19 +5,17 @@ using SharpCardAPI.Utility;
 [ApiController]
 [Route("api/[controller]")]
 public class QuizController: ControllerBase{
-    private readonly QuestionRepository _qRepo;
+    private readonly IQuestionRepository _qRepo;
 
-    public QuizController(QuestionRepository userRepository){
+    public QuizController(IQuestionRepository userRepository){
         _qRepo = userRepository;
     }
 
     [HttpGet("cards")]
-    public async Task<IActionResult> GetRandomCards(){
-        string numStr = HttpContext.Request.Query["number"].ToString();
-        string pack = HttpContext.Request.Query["pack"].ToString();
-        int numberOfQuestions = MiscMethods.StringToInt(numStr, 1, 50);
-        int pId = MiscMethods.StringToInt(pack, 1, 2);
-        var cards = await _qRepo.GetRandomQuestion(MiscMethods.Packs[pId-1] ,numberOfQuestions);
+    public async Task<IActionResult> GetRandomCards([FromQuery] int number=1, [FromQuery]int pack=1){
+        if (pack != 1 && pack != 2) pack = 1;
+        if (!(0 <= number && number <= 50)) number = 1;
+        var cards = await _qRepo.GetRandomQuestion(MiscMethods.Packs[pack-1] ,number);
         return Ok(cards);
     }
 }

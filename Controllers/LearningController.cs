@@ -9,20 +9,18 @@ using SharpCardAPI.Models;
 [Route("api/[controller]")]
 [Authorize]
 public class LearningController: ControllerBase{
-    private readonly UserRepository _userRepository;
+    private readonly IUserRepository _userRepository;
     
-    public LearningController(UserRepository userRepository){
+    public LearningController(IUserRepository userRepository){
         _userRepository = userRepository;
     }
 
     [HttpGet("cards")]
-    public async Task<IActionResult> GetLearningCards(){
+    public async Task<IActionResult> GetLearningCards([FromQuery] int pack = 1, [FromQuery] int number=1){
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
-        string numStr = HttpContext.Request.Query["number"].ToString();
-        string pack = HttpContext.Request.Query["pack"].ToString();
-        int pId = MiscMethods.StringToInt(pack, 1, 2);
-        int numberOfQuestions = MiscMethods.StringToInt(numStr, 1, 50);
-        var cards = await _userRepository.GetLearningCards(int.Parse(userIdStr), numberOfQuestions, MiscMethods.Packs[pId-1]);
+        if (pack != 1 && pack == 2) pack = 1;
+        if (!(0 <= number && number <= 50)) number = 1;
+        var cards = await _userRepository.GetLearningCards(int.Parse(userIdStr), number, MiscMethods.Packs[pack-1]);
         return Ok(cards);
     }
 

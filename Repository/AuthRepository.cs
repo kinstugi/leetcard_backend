@@ -3,8 +3,12 @@ using SharpCardAPI.Models;
 using SharpCardAPI.Utility;
 
 namespace SharpCardAPI.Repository;
+public interface IAuthRepository{
+    public Task<User> CreateUserAccount(UserDTO userDTO, bool isPersonel = false);
+    public Task<string> AuthenticateUser(UserDTO userDTO);
+}
 
-public class AuthRepository{
+public class AuthRepository: IAuthRepository{
     private readonly AppDbContext _dbContext;
     private readonly IConfiguration _configuration;
 

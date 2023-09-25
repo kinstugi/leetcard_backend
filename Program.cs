@@ -21,9 +21,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(); // adding db context
 
-builder.Services.AddTransient<AuthRepository>();
-builder.Services.AddTransient<UserRepository>();
-builder.Services.AddTransient<QuestionRepository>();
+builder.Services.AddTransient<IAuthRepository,AuthRepository>();
+builder.Services.AddTransient<IUserRepository,UserRepository>();
+builder.Services.AddTransient<IQuestionRepository,QuestionRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

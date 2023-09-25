@@ -4,8 +4,12 @@ using SharpCardAPI.Models;
 using SharpCardAPI.Utility;
 
 namespace SharpCardAPI.Repository;
+public interface IQuestionRepository{
+    public Task<IEnumerable<Question>> GetAll(string pack);
+    public Task<IEnumerable<Question>> GetRandomQuestion(string pack, int count=5);
+}
 
-public class QuestionRepository{
+public class QuestionRepository:IQuestionRepository{
     private readonly AppDbContext _context;
     public QuestionRepository(AppDbContext context){
         _context = context;

@@ -30,7 +30,7 @@ public class MiscMethods{
         }
         return result;
     }
-
+    //TODO
     public static int StringToInt(string numStr, int min, int max){
         int num;
         bool res =  int.TryParse(numStr, out num);

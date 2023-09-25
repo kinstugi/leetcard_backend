@@ -7,9 +7,9 @@ namespace SharpCardAPI.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class Auth: ControllerBase{
-    private readonly AuthRepository _authRepo;
-    private readonly UserRepository _userRepo;
-    public Auth(AuthRepository authRepository, UserRepository userRepo){
+    private readonly IAuthRepository _authRepo;
+    private readonly IUserRepository _userRepo;
+    public Auth(IAuthRepository authRepository, IUserRepository userRepo){
         _authRepo = authRepository;
         _userRepo = userRepo;
     }

@@ -8,16 +8,14 @@ using System.Security.Claims;
 [Route("api/[controller]")]
 [Authorize]
 public class StatisticsController: ControllerBase{
-    private readonly UserRepository _userRepo;
-    public StatisticsController(UserRepository userRepo){
+    private readonly IUserRepository _userRepo;
+    public StatisticsController(IUserRepository userRepo){
         _userRepo = userRepo;
     }
 
     [HttpGet("me")]
-    public async Task<IActionResult> GetUserOverallStat(){
+    public async Task<IActionResult> GetUserOverallStat([FromQuery]int count=1){
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
-        var countStr = HttpContext.Request.Query["count"].ToString();
-        var count = MiscMethods.StringToInt(countStr, 5, 10);
         var userId =  int.Parse(userIdStr);
         var res = new Dictionary<string, object>();
         res["overall"] = await _userRepo.GetUserStats(userId);
