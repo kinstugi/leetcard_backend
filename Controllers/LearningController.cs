@@ -18,7 +18,7 @@ public class LearningController: ControllerBase{
     [HttpGet("cards")]
     public async Task<IActionResult> GetLearningCards([FromQuery] int pack = 1, [FromQuery] int number=1){
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
-        if (pack != 1 && pack == 2) pack = 1;
+        if (pack != 1 && pack != 2) pack = 1;
         if (!(0 <= number && number <= 50)) number = 1;
         var cards = await _userRepository.GetLearningCards(int.Parse(userIdStr), number, MiscMethods.Packs[pack-1]);
         return Ok(cards);
