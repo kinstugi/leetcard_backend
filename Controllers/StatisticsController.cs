@@ -16,11 +16,13 @@ public class StatisticsController: ControllerBase{
     [HttpGet("me")]
     public async Task<IActionResult> GetUserOverallStat([FromQuery]int count=1){
         var userIdStr = HttpContext.User.FindFirst(ClaimTypes.PrimarySid)!.Value;
+        var countStr = HttpContext.Request.Query["count"].ToString();
+        var statCount = MiscMethods.StringToInt(countStr, 5, 10);
         var userId =  int.Parse(userIdStr);
         var res = new Dictionary<string, object>();
         res["overall"] = await _userRepo.GetUserStats(userId);
-        res["topQuestions"] = await _userRepo.GetTopQuestions(userId, count);
-        res["bottomQuestions"] = await _userRepo.GetBottomQuestions(userId, count);
+        res["topQuestions"] = await _userRepo.GetTopQuestions(userId, statCount);
+        res["bottomQuestions"] = await _userRepo.GetBottomQuestions(userId, statCount);
         return Ok(res);
     }
 
